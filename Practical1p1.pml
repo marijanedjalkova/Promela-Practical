@@ -1,13 +1,10 @@
-#define SIZE 0
-byte count;
 byte sum1;
 byte sum2;
-chan outgoing1 = [SIZE] of {byte};
-chan outgoing2 = [SIZE] of {byte};
+chan outgoing1 = [1] of {byte};
+chan outgoing2 = [1] of {byte};
 chan receiving = [1] of {byte};
 
 init{
-	count = 1;
 	sum1 = 0;
 	sum2 = 0;
 	run Intermediate1();
@@ -17,6 +14,7 @@ init{
 }
 
 proctype Sender(){
+	byte count = 1;
 	do
 		:: count <=10->
 			if
