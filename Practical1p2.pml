@@ -1,11 +1,13 @@
 #define N 6
+bool oneTrue;
+bool moreThanOneTrue;
 bool print[N] = false;
 chan outgoing = [0] of {byte};
 chan receiving = [0] of {byte};
-int k;
-int count;
 
 init{
+	oneTrue = false;
+	moreThanOneTrue = false;
 	int i;
 	for (i : 0 .. N - 1){
 		run P(i);
@@ -20,7 +22,6 @@ proctype Distributor(){
 	do
 	:: mylimit > 0 -> outgoing!mylimit;
 				mylimit = mylimit - 1;
-
 				receiving?ack;
 	:: mylimit <= 0 -> break;
 	od;
@@ -31,6 +32,10 @@ proctype P(int id){
 	do
 		::true -> outgoing?num;
 		print[id] = true;
+		if 
+			:: oneTrue == false -> oneTrue = true;
+			:: else -> moreThanOneTrue = true;
+		fi;
 		printf("\n=============%d from process %d===============\n", num, id);
 		print[id] = false;
 		receiving!num;
@@ -38,12 +43,8 @@ proctype P(int id){
 }
 
 never{
-	count = 0;
-	for (k : 0 .. N - 1){
-		if 
-			:: print[k] == true -> count++;
-		fi;
-	}
-	count < 2;
+	do
+	:: moreThanOneTrue == true;
+	od;
 }
 

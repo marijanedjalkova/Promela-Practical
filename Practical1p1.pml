@@ -1,8 +1,8 @@
 byte sum1;
 byte sum2;
-chan outgoing1 = [1] of {byte};
-chan outgoing2 = [1] of {byte};
-chan receiving = [1] of {byte};
+chan outgoing1 = [0] of {byte};
+chan outgoing2 = [0] of {byte};
+chan receiving = [0] of {byte};
 
 init{
 	sum1 = 0;
@@ -22,20 +22,21 @@ proctype Sender(){
 				:: true -> outgoing2!count;
 			fi;
 			count++;
+		:: count > 10 -> break;
 	od;
 }
 
 proctype Receiver(){
 	byte recv;
 	do
-	:: nempty(receiving) -> receiving?recv;
+		:: receiving?recv;
 	od;
 }
 
 proctype Intermediate1(){
 	byte recv;
 	do
-		:: nempty(outgoing1) -> outgoing1?recv;
+		:: outgoing1?recv;
 			sum1 = sum1 + recv;
 			receiving!recv;
 	od;
@@ -45,7 +46,7 @@ proctype Intermediate1(){
 proctype Intermediate2(){
 	byte recv;
 	do
-		:: nempty(outgoing2) -> outgoing2?recv;
+		:: outgoing2?recv;
 			sum2 = sum2 + recv;
 			receiving!recv;
 	od;

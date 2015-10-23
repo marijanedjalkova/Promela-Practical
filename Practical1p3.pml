@@ -24,9 +24,9 @@ active proctype P3(){
 	od;
 }
 
-ltl oddness {[]xodd}
+ltl stmt1 {[]xodd}
 ltl stmt2 {<>[]xodd}
 ltl stmt3 {<>[]<>xodd}
 ltl stmt4 {[]ylex}
-ltl stmt5 {yex-><>!yex}
+ltl stmt5 {[](yex-><>!yex)}
 
